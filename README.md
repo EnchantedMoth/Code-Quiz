@@ -38,3 +38,5 @@ The following animation demonstrates the given the application functionality:
 This animation shows my projects functionality:
 
 ![My project showing the quiz and high score functionality](./Assets/Timed-Code-Quiz.gif)
+
+This is a link to my quiz so you can try it for yourself: [My quiz](https://enchantedmoth.github.io/Code-Quiz/)
