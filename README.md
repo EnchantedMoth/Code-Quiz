@@ -40,3 +40,5 @@ This animation shows my projects functionality:
 ![My project showing the quiz and high score functionality](./Assets/Timed-Code-Quiz.gif)
 
 This is a link to my quiz so you can try it for yourself: [My quiz](https://enchantedmoth.github.io/Code-Quiz/)
+
+Note: I did recieve help from Jose Lopez (a tutor) on writing a loop that dynamically adds elements to the page. I also recieved help from a [friend](https://github.com/QwiZix) on moving my questions and answers from one list to another as well as fixing bugs throughout my code.
