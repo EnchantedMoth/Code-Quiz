@@ -10,8 +10,8 @@ var highScoreClck = document.querySelector(".high-score")
 var choicesContainer = document.querySelector(".choices")
 var bonusContainer = document.querySelector(".bonus")
 var rightWrongEl = document.querySelector("#right-wrong")
-
-var count = 0;
+// placeholder for the scores pulled from local storage
+var scores = []
 // holds points
 var points = 0;
 // place holder for which answer is correct
@@ -39,24 +39,18 @@ highScoresEl.setAttribute("Hidden", true)
 var secondsLeft = 0;
 // using this for testing so I couldn't double click the button
 var debounce = false;
-// holds all my questions
+// I set question and answer lists in the resetQA function
 var questionList = [
-    // "When setting an interval which of these would equal 2 seconds",
-    // "What is the index of smell var senses = ['sight', 'sound', 'smell', 'taste', 'touch']", 
-    // "question3"
 ];
 // questions go here once used so they don't get used twice
 var usedQuestions = []
-// holds all my answers
-var answerList = [ //correct answer is always answer 1
-    // "2000*twoSeconds*2s*time = 2.seconds",
-    // "[2]*[3]*[smell]*indexOfSenses = 'smell'",
-    // "3answer1*answer2*answer3*answer4"
+
+var answerList = [
 ];
 // answers go here once they are used
 var usedAnswers = []
 
-// function used to move Q's and A's from the holder to the used
+// function used to move Q's and A's from the list to the usedlist
 function moveTableElement(indexToMove, removeFromTable, addToTable) {
     addToTable.unshift(removeFromTable[indexToMove]);
     removeFromTable.splice(indexToMove, 1);
@@ -67,7 +61,7 @@ function moveTableElement(indexToMove, removeFromTable, addToTable) {
 function newQuestion() {
     
     
-
+    // choosing a random question and answer set
   var i = Math.floor(Math.random() * questionList.length)
 
   var selectedQuestion = questionList [i]
@@ -77,7 +71,7 @@ function newQuestion() {
   var buttonList = [a, b, c, d];
 
   var usedButtons = [];
-
+    // I randomize the button order here
   for (v=0; v < 4; v++){
     var buttonRandom = Math.floor(Math.random() * buttonList.length)
     
@@ -86,15 +80,15 @@ function newQuestion() {
 
   currentCorrectButton = usedButtons[0]
 
-  console.log(usedButtons)
-
+  
+    // making sure we have a question and answer to select
   if (selectedQuestion && selectedAnswer){
     
-
+    // setting which button holds the correct answer after randomizing
     moveTableElement(i, questionList, usedQuestions)
     moveTableElement(i, answerList, usedAnswers)
     questionEl.textContent = usedQuestions[0]
-
+    
     var splitAnswers = usedAnswers[0].split('*')
     var correctAnswer = splitAnswers[0]
     
@@ -103,10 +97,10 @@ function newQuestion() {
     usedButtons[2].textContent = splitAnswers[2]
     usedButtons[3].textContent = splitAnswers[3]
 
-    console.log(points)
 
 
   } else {
+    // if there are no more questions we get a bonus question
     choicesContainer.setAttribute("Hidden", true)
     bonusContainer.removeAttribute("Hidden")
 
@@ -115,8 +109,6 @@ function newQuestion() {
     bonusB.textContent = "Is it an African or European Swallow?"
     bonusC.textContent = "Blue! No..wait-AHHHHHHH"
     bonusD.textContent = "20.1 Miles Per Hour"
-
-    // how do I make all of these event listeners remove when one is selected
 
   };
 };
@@ -137,7 +129,7 @@ function gameTimer() {
     }, 1000);
 }
 
-
+// event listeners to either add points or remove time
 a.addEventListener("click", function(){
     if(a === currentCorrectButton) {
         points = points+2;
@@ -194,7 +186,7 @@ d.addEventListener("click", function(){
     }
     
 });
-
+// functions to display if the answer select was right or wrong
 function right(){
     rightWrongEl.innerHTML ="";
     var correct = document.createElement('p')
@@ -208,7 +200,7 @@ function wrong(){
     incorrect.textContent = "Incorrect"
     rightWrongEl.append(incorrect)
 }
-
+// event listeners for the bonus question
 bonusA.addEventListener("click", function(){
     endGame()
 });
@@ -228,7 +220,7 @@ bonusD.addEventListener("click", function(){
     endGame()
 });
 
-
+// all my functions to start and restart the game
 startGame.addEventListener("click", function() {
     
     if (debounce === false){
@@ -246,7 +238,7 @@ startGame.addEventListener("click", function() {
 });
 
 
-
+// ends game and lets person enter their score
 function endGame() {
     timerEl.setAttribute("Hidden", true)
     choicesContainer.setAttribute("Hidden", true);
@@ -258,7 +250,7 @@ function endGame() {
     startGame.removeAttribute("Hidden");
     startGame.textContent = "Try again?"
 }
-
+// where all my questions and answers are stored so when I call the function I can repopulate the variabls
 function resetQAs() {
     questionList = [
         "When setting an interval which of these would equal 2 seconds?",
@@ -288,9 +280,8 @@ function resetQAs() {
     
     usedAnswers = []
 }
-
+// event listener so when you click on save your score it can run the functions
 saveScoreBtn.addEventListener("click", function(event){
-    highScoresEl.removeAttribute("Hidden")
     event.preventDefault();
     console.log(points)
     if(initialsInput.value.length === 3) {
@@ -303,12 +294,13 @@ saveScoreBtn.addEventListener("click", function(event){
         storeMyScores()
         showScores()
     } else {
-        alert("Please enter 3 letters for your initials to save your score")
+        alert("Please enter 3 letters for your initials to save your score")   
+        initialsInput.value = ""
         return;
     }
     initialsInput.value = ""
 });
-
+// this function sorts my scores from highest to lowest highest then removes the lowest score from the array then dynamically builds that array through the loop so they can be shown
 function setScores(){
     var sortedScores = scores.sort(function (a, b){
         return b.pointsScored - a.pointsScored
@@ -329,13 +321,13 @@ function setScores(){
 
     }
 }
-
+// shows scores
 function showScores(){
     setScores()
     questionEl.textContent = "Top Five Scores!"
     highScoresEl.removeAttribute("Hidden")
 }
-
+// checks for scores then adds them through the set scores function
 function localScoresCheck() {
     var storedScores  = JSON.parse(localStorage.getItem("scores"));
 
@@ -347,46 +339,26 @@ function localScoresCheck() {
 
     setScores()
 }
-
+// stores my scores to local storage
 function storeMyScores () {
     
     localStorage.setItem("scores", JSON.stringify(scores))
 }
-
+//lets you check high scores whenever but also ends the game
 highScoreClck.addEventListener("click", function(){
     endGame()
     showScores()
     form.setAttribute("Hidden", true)
 })
 
-var scores = []
 
+//checks the local storage for stored scores when the page loads
 localScoresCheck()
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// The acceptance criteria
 
 // GIVEN I am taking a code quiz
 // WHEN I click the start button
