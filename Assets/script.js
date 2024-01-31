@@ -17,6 +17,8 @@ var points = 0;
 // place holder for which answer is correct
 var currentCorrectButton = a;
 
+var isPlayingGame = false;
+
 // targeting my buttons
 var a = document.querySelector(".a");
 var b = document.querySelector(".b");
@@ -88,7 +90,7 @@ function newQuestion() {
     moveTableElement(i, questionList, usedQuestions)
     moveTableElement(i, answerList, usedAnswers)
     questionEl.textContent = usedQuestions[0]
-    
+
     var splitAnswers = usedAnswers[0].split('*')
     var correctAnswer = splitAnswers[0]
     
@@ -123,7 +125,10 @@ function gameTimer() {
         if(secondsLeft === 0 || secondsLeft < 0) {
 
             clearInterval(timerInterval);
-            endGame()
+            if(isPlayingGame === true){
+                endGame(true)
+            }
+            
         }
 
     }, 1000);
@@ -186,12 +191,26 @@ d.addEventListener("click", function(){
     }
     
 });
+//variable to track quantity of function calls
+var varCountVar = 0
+
+//function to make the current right or wrong disappear
+function stopShowingRightWrong(){
+    varCountVar++
+    var currentCount = varCountVar
+    setTimeout(function(){
+        if (varCountVar === currentCount){
+        rightWrongEl.innerHTML = "";
+    }
+    },1500)
+}
 // functions to display if the answer select was right or wrong
 function right(){
     rightWrongEl.innerHTML ="";
     var correct = document.createElement('p')
     correct.textContent = "Correct"
     rightWrongEl.append(correct)
+    stopShowingRightWrong()
 }
 
 function wrong(){
@@ -199,25 +218,26 @@ function wrong(){
     var incorrect = document.createElement('p')
     incorrect.textContent = "Incorrect"
     rightWrongEl.append(incorrect)
+    stopShowingRightWrong()
 }
 // event listeners for the bonus question
 bonusA.addEventListener("click", function(){
-    endGame()
+    endGame(true)
 });
 
 bonusB.addEventListener("click", function(){
     points = points + 10
-    endGame()
+    endGame(true)
 });
 
 bonusC.addEventListener("click", function(){
     points = points + 5
-    endGame()
+    endGame(true)
 });
 
 bonusD.addEventListener("click", function(){
     points = points + 4
-    endGame()
+    endGame(true)
 });
 
 // all my functions to start and restart the game
@@ -228,6 +248,7 @@ startGame.addEventListener("click", function() {
         startGame.setAttribute("Hidden", true);
         highScoresEl.setAttribute("Hidden", true)
         choicesContainer.removeAttribute("Hidden");
+        isPlayingGame = true;
         points = 0;
         debounce = true;
         secondsLeft = 60;
@@ -239,16 +260,21 @@ startGame.addEventListener("click", function() {
 
 
 // ends game and lets person enter their score
-function endGame() {
+function endGame(isEndGame) {
+    rightWrongEl.innerHTML = "";
+    isPlayingGame = false;
     timerEl.setAttribute("Hidden", true)
     choicesContainer.setAttribute("Hidden", true);
     bonusContainer.setAttribute("Hidden", true)
     secondsLeft = 0
     questionEl.textContent = "Your score: " + points
+    if(isEndGame === true){
     form.removeAttribute("Hidden")
+    startGame.textContent = "Try again?"
+} else {startGame.textContent = "Start Game"}
     debounce = false;
     startGame.removeAttribute("Hidden");
-    startGame.textContent = "Try again?"
+    
 }
 // where all my questions and answers are stored so when I call the function I can repopulate the variabls
 function resetQAs() {
@@ -346,7 +372,7 @@ function storeMyScores () {
 }
 //lets you check high scores whenever but also ends the game
 highScoreClck.addEventListener("click", function(){
-    endGame()
+    endGame(false)
     showScores()
     form.setAttribute("Hidden", true)
 })
