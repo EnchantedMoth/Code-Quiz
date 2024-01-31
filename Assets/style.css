@@ -32,6 +32,11 @@ main {
     font-weight: bold;
 }
 
+.form {
+    text-align: center;
+    font-size:large;
+    font-weight: bold;
+}
 .choices {
  align-items: flex-start;
 }
@@ -74,4 +79,10 @@ button {
     font-size: 15px;
     margin: 5px;
     border-radius: 3px;
+}
+
+#right-wrong {
+    font-size: large;
+    color:rgb(63, 62, 62);
+    font-style: italic;
 }

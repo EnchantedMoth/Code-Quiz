@@ -9,7 +9,7 @@
 <body>
     <!-- header with highscores topleft and time top right -->
     <header>
-        <p class="high-score">high-score</p>
+        <button class="high-score">high-score</button>
         <p class="timer"></p>
     </header>
 
@@ -19,27 +19,53 @@
     <div class="container">
         <p class="question">Do You Want To Play A Game?</p>
 
-            <ul class="choices">
-                <button id="start-game">
-                    Start Game
-                </button>
-                
-                <div class="a">
+        <div class="form">
+            <p>Add your initials and save your score</p>
+            <form>
+                <input type="text" id="initials" name="initials" placeholder="ABC">
+                <button id="save-score">Save your score</button>
+            </form>
+        </div>
 
-                </div>
-                <br>
-                <div class="b">
-                    
-                </div>
-                <br>
-                <div class="c">
-                    
-                </div>
-                <br>   
-                <div class="d">
-                    
-                </div>
-            </ul>
+        <div class="high-scores"></div>
+        
+        <button id="start-game">
+            Start Game
+        </button>
+
+        <ul class="choices">
+          
+            <button class="a"></button>
+            <br>
+            <button class="b">
+                <p></p>
+            </button>
+            <br>
+            <button class="c">
+                <p></p>
+            </button>
+            <br>   
+            <button class="d">
+                <p></p>
+            </button>
+        </ul>
+
+        <ul class="bonus">
+            <button id="bonus-A"></button>
+            <br>
+            <button id="bonus-B"></button>
+            <br>
+            <button id="bonus-C"></button>
+            <br>
+            <button id="bonus-D"></button>
+        </ul>
+
+        <br>
+        <br>
+
+        <div id="right-wrong"></div>
+
+
     </div>
 
     
